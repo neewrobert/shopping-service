@@ -1,5 +1,6 @@
 package com.neewrobert.shopping.domain.service;
 
+import com.neewrobert.shopping.domain.exception.UserAlreadyExistsException;
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.port.UserRepository;
 import com.neewrobert.shopping.infrastructure.web.dto.UserDTO;
@@ -23,7 +24,7 @@ public class UserService {
 
     public UserDTO registerNewUser(UserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.email())) {
-            throw new RuntimeException("User already exists");
+            throw new UserAlreadyExistsException("Email already exists:" + userDTO.email());
         }
         var user = toUser(userDTO);
         return toUserDTO(userRepository.save(user));

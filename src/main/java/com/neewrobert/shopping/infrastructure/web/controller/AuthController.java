@@ -2,7 +2,9 @@ package com.neewrobert.shopping.infrastructure.web.controller;
 
 import com.neewrobert.shopping.domain.service.UserService;
 import com.neewrobert.shopping.infrastructure.web.dto.UserDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO userDTO) {
+    @Validated
+    public ResponseEntity<UserDTO> signUp(@Valid @RequestBody UserDTO userDTO) {
 
         var createdUser = userService.registerNewUser(userDTO);
         URI userURI = URI.create("/api/users/" + createdUser.email());
