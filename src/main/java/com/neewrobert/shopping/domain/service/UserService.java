@@ -32,6 +32,7 @@ public class UserService {
 
     private User toUser(UserDTO userDTO) {
         return new User(
+                null,
                 userDTO.name(),
                 userDTO.email(),
                 passwordEncoder.encode(userDTO.password()),
@@ -43,7 +44,7 @@ public class UserService {
         return new UserDTO(
                 user.name(),
                 user.email(),
-                null,
+                "*********",
                 user.createdAt().toString(),
                 user.updatedAt().toString());
     }

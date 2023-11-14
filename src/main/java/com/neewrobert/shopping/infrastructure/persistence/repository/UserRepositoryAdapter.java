@@ -3,12 +3,11 @@ package com.neewrobert.shopping.infrastructure.persistence.repository;
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.port.UserRepository;
 import com.neewrobert.shopping.infrastructure.persistence.entity.UserEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.UUID;
 
-@Repository
+@Component
 public class UserRepositoryAdapter implements UserRepository {
 
     private final SpringDataUserRepository springDataUserRepository;
@@ -21,12 +20,6 @@ public class UserRepositoryAdapter implements UserRepository {
     public User save(User user) {
         UserEntity saved = springDataUserRepository.save(toUserEntity(user));
         return toUser(saved);
-    }
-
-    @Override
-    public Optional<User> findById(UUID id) {
-        Optional<UserEntity> optionalUserEntity = springDataUserRepository.findById(id);
-        return optionalUserEntity.map(this::toUser);
     }
 
     @Override
@@ -53,6 +46,7 @@ public class UserRepositoryAdapter implements UserRepository {
 
     private User toUser(UserEntity userEntity) {
         return new User(
+                userEntity.getId().toString(),
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
