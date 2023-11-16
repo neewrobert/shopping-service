@@ -1,7 +1,6 @@
 package com.neewrobert.shopping.infrastructure.security.adapter;
 
 import com.neewrobert.shopping.domain.model.User;
-import com.neewrobert.shopping.infrastructure.security.adapter.JwtServiceAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
