@@ -18,4 +18,6 @@ public class AuthenticationManagerAdapter implements CustomAuthenticationManager
     public void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
+
+
 }

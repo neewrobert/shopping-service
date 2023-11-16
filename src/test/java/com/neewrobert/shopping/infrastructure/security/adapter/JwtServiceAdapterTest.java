@@ -1,4 +1,4 @@
-package com.neewrobert.shopping.infrastructure.security;
+package com.neewrobert.shopping.infrastructure.security.adapter;
 
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.infrastructure.security.adapter.JwtServiceAdapter;
@@ -10,7 +10,7 @@ import static com.neewrobert.shopping.utils.CommonMethods.getUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {JwtServiceAdapter.class})
-class JwtServiceTest {
+class JwtServiceAdapterTest {
 
     @Autowired
     private JwtServiceAdapter jwtService;

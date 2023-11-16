@@ -1,7 +1,6 @@
 package com.neewrobert.shopping.infrastructure.config;
 
-import com.neewrobert.shopping.domain.port.UserRepository;
-import com.neewrobert.shopping.infrastructure.security.CustomUserDetailsService;
+import com.neewrobert.shopping.infrastructure.web.filter.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,16 +14,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserRepository userRepository;
+    private final AuthenticationFilter authenticationFilter;
 
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(AuthenticationFilter authenticationFilter, UserDetailsService userDetailsService) {
+        this.authenticationFilter = authenticationFilter;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -34,10 +37,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/auth/**")
                         .permitAll()
                         .anyRequest()
-                        .authenticated()
-                )
-                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider());
+                        .authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider()).addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -46,15 +48,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService(userRepository);
-    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         var daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }

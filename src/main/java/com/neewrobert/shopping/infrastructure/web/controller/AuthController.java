@@ -2,15 +2,13 @@ package com.neewrobert.shopping.infrastructure.web.controller;
 
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.service.security.AuthenticationService;
+import com.neewrobert.shopping.infrastructure.web.request.UserLoginRequest;
 import com.neewrobert.shopping.infrastructure.web.request.UserRequest;
 import com.neewrobert.shopping.infrastructure.web.response.JwtAuthenticationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -30,6 +28,17 @@ public class AuthController {
         var token = authenticationService.signUp(User.build(request.name(), request.email(), request.password()));
         var userURI = URI.create("/api/users/" + request.email());
         return ResponseEntity.created(userURI).body(new JwtAuthenticationResponse(request.email(), token));
+    }
+
+    @PostMapping("/auth/signing")
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@Valid @RequestBody UserLoginRequest request) {
+        var token = authenticationService.signIn(request.email(), request.password());
+        return ResponseEntity.ok(new JwtAuthenticationResponse(request.email(), token));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Hello World");
     }
 
 }

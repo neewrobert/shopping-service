@@ -50,4 +50,5 @@ public record User(
                 this.createdAt,
                 this.updatedAt);
     }
+
 }

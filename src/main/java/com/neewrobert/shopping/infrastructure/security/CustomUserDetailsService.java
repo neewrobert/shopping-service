@@ -5,7 +5,9 @@ import com.neewrobert.shopping.domain.port.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -27,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.email())
                 .password(user.password())
-                .roles("USER")
+                .roles(user.roles().stream().map(Enum::name).toArray(String[]::new))
                 .build();
     }
 }
