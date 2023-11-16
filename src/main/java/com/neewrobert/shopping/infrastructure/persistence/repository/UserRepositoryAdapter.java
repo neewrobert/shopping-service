@@ -1,10 +1,12 @@
 package com.neewrobert.shopping.infrastructure.persistence.repository;
 
+import com.neewrobert.shopping.domain.model.Role;
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.port.UserRepository;
 import com.neewrobert.shopping.infrastructure.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -50,6 +52,7 @@ public class UserRepositoryAdapter implements UserRepository {
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
+                List.of(Role.USER),
                 userEntity.getCreatedAt(),
                 userEntity.getUpdatedAt());
     }

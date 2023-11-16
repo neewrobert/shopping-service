@@ -1,7 +1,9 @@
 package com.neewrobert.shopping.infrastructure.web.controller;
 
-import com.neewrobert.shopping.domain.service.UserService;
-import com.neewrobert.shopping.infrastructure.web.dto.UserDTO;
+import com.neewrobert.shopping.domain.model.User;
+import com.neewrobert.shopping.domain.service.security.AuthenticationService;
+import com.neewrobert.shopping.infrastructure.web.request.UserRequest;
+import com.neewrobert.shopping.infrastructure.web.response.JwtAuthenticationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,18 +18,19 @@ import java.net.URI;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/auth/signup")
     @Validated
-    public ResponseEntity<UserDTO> signUp(@Valid @RequestBody UserDTO userDTO) {
-
-        var createdUser = userService.registerNewUser(userDTO);
-        URI userURI = URI.create("/api/users/" + createdUser.email());
-        return ResponseEntity.created(userURI).body(createdUser);
+    public ResponseEntity<JwtAuthenticationResponse> signUp(@Valid @RequestBody UserRequest request) {
+        var token = authenticationService.signUp(User.build(request.name(), request.email(), request.password()));
+        var userURI = URI.create("/api/users/" + request.email());
+        return ResponseEntity.created(userURI).body(new JwtAuthenticationResponse(request.email(), token));
     }
+
 }
+
