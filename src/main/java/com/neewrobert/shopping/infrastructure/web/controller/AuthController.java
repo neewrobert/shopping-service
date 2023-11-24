@@ -7,6 +7,7 @@ import com.neewrobert.shopping.infrastructure.web.request.UserRequest;
 import com.neewrobert.shopping.infrastructure.web.response.JwtAuthenticationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,15 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(request.email(), token));
     }
 
-    @GetMapping("/test")
+    @GetMapping("/user")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Hello World");
+        return ResponseEntity.ok("Hello USER");
     }
 
+    @GetMapping("/adming")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<String> testAdmin() {
+        return ResponseEntity.ok("Hello ADMIN");
+    }
 }
 

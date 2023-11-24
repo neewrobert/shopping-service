@@ -3,6 +3,7 @@ package com.neewrobert.shopping.infrastructure.web.filter;
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.service.security.JwtService;
 import com.neewrobert.shopping.infrastructure.security.CustomUserDetailsService;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,19 +44,22 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private void processJwtAuthentication(String jwt, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        final String username = jwtService.extractUsername(jwt);
+        final String username;
+
+        UserDetails user;
+        try {
+            username = jwtService.extractUsername(jwt);
+            user = customUserDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException | SignatureException e) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid authentication");
+            return;
+        }
+
 
         if (username.isBlank() || SecurityContextHolder.getContext().getAuthentication() != null) {
             return;
         }
 
-        UserDetails user;
-        try {
-            user = customUserDetailsService.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid authentication");
-            return;
-        }
 
         if (jwtService.isTokenValid(jwt, User.build(user.getUsername(), user.getUsername(), user.getPassword()))) {
             UsernamePasswordAuthenticationToken authentication =
