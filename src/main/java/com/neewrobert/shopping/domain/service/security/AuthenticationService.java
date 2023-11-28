@@ -22,8 +22,8 @@ public class AuthenticationService {
     }
 
     public String signUp(User user) {
-        userService.registerNewUser(user);
-        return jwtService.generateToken(user);
+        var saved = userService.registerNewUser(user);
+        return jwtService.generateToken(saved);
     }
 
     public String signIn(String username, String password) {

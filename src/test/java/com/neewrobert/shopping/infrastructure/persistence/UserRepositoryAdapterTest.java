@@ -1,5 +1,6 @@
 package com.neewrobert.shopping.infrastructure.persistence;
 
+import com.neewrobert.shopping.infrastructure.RepositoryTestConfiguration;
 import com.neewrobert.shopping.infrastructure.persistence.repository.SpringDataUserRepository;
 import com.neewrobert.shopping.infrastructure.persistence.repository.UserRepositoryAdapter;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,27 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static com.neewrobert.shopping.utils.CommonMethods.getUser;
 @DataJpaTest
-@Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class UserRepositoryAdapterTest {
+class UserRepositoryAdapterTest extends RepositoryTestConfiguration {
 
     @Autowired
     private SpringDataUserRepository springDataUserRepository;
 
     private UserRepositoryAdapter userRepositoryAdapter;
-
-    @Container
-    static PostgreSQLContainer database = new PostgreSQLContainer<>("postgres:15.0")
-            .withDatabaseName("shopping")
-            .withUsername("myuser")
-            .withPassword("secret");
-
-    @DynamicPropertySource
-    static void setDatasourceProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", database::getJdbcUrl);
-        registry.add("spring.datasource.username", database::getUsername);
-        registry.add("spring.datasource.password", database::getPassword);
-    }
 
     @BeforeEach
     void setUp() {
