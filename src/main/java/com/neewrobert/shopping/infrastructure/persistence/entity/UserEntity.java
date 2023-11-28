@@ -1,5 +1,6 @@
 package com.neewrobert.shopping.infrastructure.persistence.entity;
 
+import com.neewrobert.shopping.domain.model.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,10 @@ public class UserEntity {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public UUID getId() {
         return id;
@@ -67,5 +72,13 @@ public class UserEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

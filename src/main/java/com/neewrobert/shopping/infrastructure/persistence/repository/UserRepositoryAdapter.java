@@ -1,6 +1,5 @@
 package com.neewrobert.shopping.infrastructure.persistence.repository;
 
-import com.neewrobert.shopping.domain.model.Role;
 import com.neewrobert.shopping.domain.model.User;
 import com.neewrobert.shopping.domain.port.UserRepository;
 import com.neewrobert.shopping.infrastructure.persistence.entity.UserEntity;
@@ -47,6 +46,7 @@ public class UserRepositoryAdapter implements UserRepository {
         userEntity.setPassword(user.password());
         userEntity.setCreatedAt(user.createdAt());
         userEntity.setUpdatedAt(user.updatedAt());
+        userEntity.setRole(user.roles().getFirst());
 
         return userEntity;
     }
@@ -57,7 +57,7 @@ public class UserRepositoryAdapter implements UserRepository {
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                List.of(Role.USER),
+                List.of(userEntity.getRole()),
                 userEntity.getCreatedAt(),
                 userEntity.getUpdatedAt());
     }

@@ -45,8 +45,6 @@ public class AuthController {
     @GetMapping("/admin")
     @Secured({"ROLE_ADMIN"})
     public ResponseEntity<String> testAdmin() {
-
-        //TODO: NEEDS TO IMPLEMENT LOGIC TO CREATE ADMIN USER
         return ResponseEntity.ok("Hello ADMIN");
     }
 }

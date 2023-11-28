@@ -170,33 +170,33 @@ class AuthControllerIntegrationTest extends RepositoryTestConfiguration {
                 .statusCode(403);
     }
 
-//    @Test
-//    void shouldAccessAdminEndpoint() {
-//
-//        var rawPassword = "123456";
-//        var userAdmin = getAdmin().withPassword(passwordEncoderAdapter.encode(rawPassword));
-//        userRepository.save(userAdmin);
-//
-//        var request = "{\"email\":\"" + userAdmin.email() + "\",\"password\":\"" + rawPassword + "\"}";
-//
-//        String token = given()
-//                .contentType("application/json")
-//                .body(request)
-//                .when()
-//                .post("/api/auth/signing")
-//                .then()
-//                .statusCode(200)
-//                .extract().jsonPath().getString("token");
-//
-//        given().
-//                header("Authorization", "Bearer " + token).
-//                when()
-//                .get("/api/admin")
-//                .then()
-//                .statusCode(200)
-//                .body(equalTo("Hello ADMIN"));
-//
-//    }
+    @Test
+    void shouldAccessAdminEndpoint() {
+
+        var rawPassword = "123456";
+        var userAdmin = getAdmin().withPassword(passwordEncoderAdapter.encode(rawPassword));
+        userRepository.save(userAdmin);
+
+        var request = "{\"email\":\"" + userAdmin.email() + "\",\"password\":\"" + rawPassword + "\"}";
+
+        String token = given()
+                .contentType("application/json")
+                .body(request)
+                .when()
+                .post("/api/auth/signing")
+                .then()
+                .statusCode(200)
+                .extract().jsonPath().getString("token");
+
+        given().
+                header("Authorization", "Bearer " + token).
+                when()
+                .get("/api/admin")
+                .then()
+                .statusCode(200)
+                .body(equalTo("Hello ADMIN"));
+
+    }
 
     @Test
     void shouldNotAccessAdminEndpointWhenNotAuthenticated_403() {
