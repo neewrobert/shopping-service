@@ -38,13 +38,15 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> test() {
+    public ResponseEntity<String> testUser() {
         return ResponseEntity.ok("Hello USER");
     }
 
-    @GetMapping("/adming")
-    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<String> testAdmin() {
+
+        //TODO: NEEDS TO IMPLEMENT LOGIC TO CREATE ADMIN USER
         return ResponseEntity.ok("Hello ADMIN");
     }
 }

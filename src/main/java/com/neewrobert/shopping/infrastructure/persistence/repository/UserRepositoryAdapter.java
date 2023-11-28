@@ -35,6 +35,11 @@ public class UserRepositoryAdapter implements UserRepository {
         return springDataUserRepository.existsByEmail(email);
     }
 
+    @Override
+    public void deleteAll() {
+        springDataUserRepository.deleteAll();
+    }
+
     private UserEntity toUserEntity(User user) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(user.name());
